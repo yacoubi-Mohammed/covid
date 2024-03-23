@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block i %}
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="show-row">
+    <h3>Dashbord/Table/Last</h3>
+    <form method="post" id="my-form">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+</div>
+<div class="projects">
+    <div class="tables">
+        <table>
+            <thead class="DIV">
+                <tr>
+                    <th>Nom <img id="Capteur-logo" src="{% static 'images/dht11.jpg' %}" alt="Capteur Image"></th>
+                    <th>Temperature <img id="Temperature-logo" src="{% static 'images/temp.jpg' %}" alt="Temperature Image"></th>
+                    <th>Oxygene Level <img id="Oxygene-logo" src="{% static 'images/oxygene.jpg' %}" alt="Oxygene Level Image"></th>
+                    <th>Respiratory Rate <img id="Respiratory-logo" src="{% static 'images/respiratory.jpg' %}" alt="Respiratory Rate Image"></th>
+                    <th>Heart Rate <img id="Heart-logo" src="{% static 'images/heart.jpg' %}" alt="Heart Rate Image"></th>
+                    <th>Date <img id="Date-logo" src="{% static 'images/time.jpg' %}" alt="Date Image"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="{% url 'myChart' %}" >Patient</a></td>
+                    <td>{{ patient.temp }}</td>
+                    <td>{{ patient.oxygene_level }}</td>
+                    <td>{{ patient.respiratoryRate }}</td>
+                    <td>{{ patient.heartRate }}</td>
+                    <td>{{ patient.dt }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button id="csv">Télécharger CSV</button>
+</div>
+<script>
+    var selectEl = $('#mon_select');
+    selectEl.change(function() {
+        $('#my-form').submit();
+    });
+
+    var downloadButton = document.getElementById('csv');
+    downloadButton.addEventListener('click', function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/download_csv/', true);
+        xhr.responseType = 'blob';
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var url = window.URL.createObjectURL(xhr.response);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'model_values.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        };
+        xhr.send();
+    });
+</script>
+{% endblock i %}

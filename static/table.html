@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block i %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="show-row">
+    <h3>Dashbord/Table/</h3>
+    <form method="post" id="my-form">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+    <script>
+        var selectEl = $('#mon_select');
+        selectEl.change(function() {
+            $('#my-form').submit();
+        });
+    </script>
+</div>
+<div class="projects">
+    <div class="tables">
+        <table>
+            <thead class="DIV">
+                <tr>
+                    <th>ID</th>
+                    <th>Temperature</th>
+
+                    <th>Oxygen Level</th>
+                    <th>Respiratory Rate</th>
+                    <th>Heart Rate</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in data %}
+                <tr>
+                    <td>{{ patient.id }}</td>
+                    <td>{{ patient.temp }}</td>
+
+                    <td>{{ patient.oxygene_level }}</td>
+                    <td>{{ patient.respiratoryRate }}</td>
+                    <td>{{ patient.heartRate }}</td>
+                    <td>{{ patient.dt }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock i %}
